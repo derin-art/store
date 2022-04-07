@@ -1,5 +1,6 @@
 const express = require("express")
 const multer = require("multer")
+require("express-async-errors")
 const storage = multer.diskStorage({
     destination:function(req, file, cb){
        cb(null, "./uploads/")
@@ -24,12 +25,15 @@ const fileFilter =(req, file, cb)=>{
 
 const uploads = multer({storage: storage, limits:{ fileSize: 1024 * 1024 * 4}, fileFilter: fileFilter})
 
-const {getAllitems, createItems, getSingleItem} = require("../controllers/controls.js")
+const {getAllitems, createItems, getSingleItem, deleteItem, editItem } = require("../controllers/controls.js")
+const {createUser, verifyUser, getAllUsers} = require("../Authorization/Auth.js")
 
 const router = express.Router()
-
-router.route("/").get(getAllitems).post(uploads.single("productImage"),createItems)
-router.route("/:id").get(getSingleItem)
+router.route("/users").get(getAllUsers)
+router.route("/users/login").post(verifyUser)
+router.route("/users").post(createUser)
+router.route("/storeV1").get(getAllitems).post(uploads.single("productImage"),createItems)
+router.route("/storeV1/:id").get(getSingleItem).delete(deleteItem).patch(uploads.single("productImage"),editItem)
 
 
 

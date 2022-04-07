@@ -2,6 +2,8 @@ const express = require("express")
 const connect = require("./database/connect.js")
 const app = express()
 const router = require("./routers/router.js")
+const {basicError, notFoundError} = require("./errors/BasicErrors.js")
+require("express-async-errors")
 
 
 require("dotenv").config()
@@ -11,6 +13,11 @@ require("dotenv").config()
 app.use(express.json())
 
 app.use("/", router)
+
+
+app.use(notFoundError)
+app.use(basicError)
+
 
 const start = async()=>{
     try{
@@ -23,5 +30,7 @@ const start = async()=>{
         console.log(err)
     }
 }
+
+
 
 start()
