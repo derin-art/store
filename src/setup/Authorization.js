@@ -3,8 +3,10 @@ import defaultImg from "../img/545053.jpg"
 import axios from "axios"
 
 
+
 export default function Authorization(){
     const [register, setRegister] = React.useState(true)
+    const [errorMessage, setErrorMessage] = React.useState("")
     const [backgroundImageDetails, setBackGroundPhoto] = React.useState({backGroundPhoto: defaultImg, backGroundPhotoAuthor: "Image by coporation"})
     
     
@@ -102,10 +104,11 @@ export default function Authorization(){
     }, [])
    
     const createUser = async ()=>{
-        const data =  await axios.post("http://localhost:1000/users", {name: registerFormData.name, email: registerFormData.email, password: registerFormData.setPassword}).catch(err =>{
+        const res =  await axios.post("http://localhost:1000/users", {name: registerFormData.name, email: registerFormData.email, password: registerFormData.setPassword}).catch(err =>{
             console.log(err)
+            setErrorMessage(err.message)
         })
-         console.log(JSON.stringify(data))
+         console.log(JSON.stringify(res.data))
     }
 
  const registerForm =  <form className="flex flex-col pl-2 sm:items-center sm:justify-center" >
