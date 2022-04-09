@@ -4,11 +4,12 @@ require("express-async-errors")
 const CustomError = require("../CutomError/CustomError.js")
 
 const createUser = async (req, res)=>{
-   const userAlreadyExist = userModel.findOne({ 
+   const userAlreadyExist = await userModel.findOne({ 
       name: req.body.name, 
       email: req.body.email})
-      
+   
       if(userAlreadyExist){
+         console.log("whats the do")
          throw new CustomError("This user already exist", 400)
       }  
       const user =  await  userModel.create({
