@@ -31,6 +31,7 @@ const getAllUsers = async (req, res)=>{
 
 const verifyUser = async (req, res)=>{
    const {email, password} = req.body
+   console.log({email, password})
    const user = await userModel.findOne({email, password})
    if(!user){
       throw new CustomError("This user does not exist", 404)

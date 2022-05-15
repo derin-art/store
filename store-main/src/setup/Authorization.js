@@ -1,8 +1,13 @@
 import React from "react";
 import defaultImg from "../img/545053.jpg"
-import axios from "axios"
+import axios, { Axios } from "axios"
 import "tw-elements"
 import Loader from "./Loader";
+import MainPage from "../MainApp/MainPage";
+import {Route, Link, Routes, Redirect, useLocation, Navigate, useNavigate} from "react-router-dom"
+import NotFound from "./NotFound";
+
+
 
 
 
@@ -74,8 +79,6 @@ export default function Authorization(){
      
        
         setBackGroundPhoto(prev =>{
-            const backGroundPhoto = prev.backGroundPhoto
-            const backGroundPhotoAuthor = prev.backGroundPhotoAuthor
             return {backGroundPhoto: Image, backGroundPhotoAuthor: Author}
         })
     
@@ -87,15 +90,33 @@ export default function Authorization(){
         getBackGroundImages()
     }, [])
    
+
+
     const createUser = async ()=>{
         setLoading(true)
          const data =  await axios.post("http://localhost:1000/users", {name: registerFormData.name, email: registerFormData.email, password: registerFormData.setPassword}).catch(err =>{
+            /* Receives axios error or response and decides error message */
             console.log(err)
             console.log(JSON.stringify(err.body))
             console.log(JSON.stringify(err))
-            setErrorMessage("An error occurred, check your connection and try again")
-            return
+            const errObj = JSON.stringify(err)
+            const refinedObj = JSON.parse(errObj)
+            console.log(errObj.status)
+            if(refinedObj.status === 400){
+                setErrorMessage("User or email already in use")
+                setLoading(false)
+                return
+            }
+            else{
+                setErrorMessage("An error occurred, check your connection and try again")
+                setLoading(false)
+                return
+            }
+
         })
+        if(!data){
+          return   
+        }
         const response = JSON.parse(JSON.stringify(data))
          console.log(response)
          if(response.data && response.status === 200){
@@ -104,22 +125,57 @@ export default function Authorization(){
          } 
       
     }
+
+
+    const signIn = async ()=>{
+        /* Sends request to backend and saves the data, the user as state */
+        setLoading(true)
+       const res = await axios.post("http://localhost:1000/users/login", {password: signInFormData.password, email: signInFormData.email}).catch(err =>{
+           setLoading(false)
+           const refinedErr = JSON.stringify(err)
+           const finalErr = JSON.parse(refinedErr)
+           console.log(finalErr)
+           if(finalErr.status === 404){
+               setErrorMessage("This user dosen't exist or the password is wrong")
+               return
+           }
+           else{
+               setErrorMessage("An error occured. Check your internet connection")
+           }
+       })
+
+       if(!res){
+           return
+       }
+
+       if(res.status === 200){
+           setErrorMessage("")
+           setCreatedUser({...res.data, status:  res.status})
+           setLoading(false)
+           
+       }
+       console.log(res)
+
+
+    }
+
     function ValidateEmail(inputText)
         {
                 var mailformat = /^w+([.-]?w+)*@w+([.-]?w+)*(.w{2,3})+$/;
                 if(inputText.match(mailformat))
                 {
                 alert("You have entered a valid email address!");    //The pop up alert for a valid email address
-                return false;
+                return true;
                 }
                 else{
-                    return true
+                    return false
                 }
     
         }
 
 
     const validateForm = (form)=>{
+        console.log(form.email)
         if(registerFormData.name === ""){
             setErrorMessage("Please complete the form before submission")
             return
@@ -142,7 +198,7 @@ export default function Authorization(){
             setErrorMessage("Your password and confirm Password do not match")
             return
         }
-        if( ValidateEmail(registerFormData.email)){
+        if( ValidateEmail(form.email)){
             console.log("hey whats up email")
             setErrorMessage("Please enter a proper email")
             return
@@ -151,6 +207,7 @@ export default function Authorization(){
         createUser()
 
     }
+  
 
     const validateSignInForm = ()=>{
         if(signInFormData.email === ""){
@@ -165,7 +222,11 @@ export default function Authorization(){
             setErrorMessage("Please enter a proper email")
             return
         }
+        signIn()
+      
+     
     }
+
    
  
   
@@ -183,36 +244,54 @@ export default function Authorization(){
 const signInForm =   <form className="flex flex-col pl-2 sm:items-center sm:justify-center">
         <input className="p-2 w-24 mt-4 text-sm border rounded outline-none focus:bg-gray-100 text-gray-600" type="email" placeholder="email" name="email" value={signInFormData.email} onChange={(event)=>{updateSignInForm(event)}}></input>
         <input className="p-2 w-24 mt-4 text-sm border rounded outline-none text-gray-600 focus:bg-gray-100" type="password" placeholder="password" value={signInFormData.password} name="password" onChange={(event)=>{updateSignInForm(event)}}></input>
-        <button type="button" className="w-24 mt-4 p-2 text-blue-400 border border-blue-900 focus:bg-blue-700 focus:text-white hover:bg-gray-900 ">login</button>
+        <button type="button" onClick={()=>{validateSignInForm()}} className="w-24 mt-4 p-2 text-blue-400 border border-blue-900 focus:bg-blue-700 focus:text-white hover:bg-gray-900 ">login</button>
     </form>
      
      console.log(backgroundImageDetails)
      console.log(registerFormData)
+     console.log(useLocation())
+     console.log(returnedCreatedUser, "returned data")
    
-    return <div className="h-screen  flex ">
-        <div className="w-3/4 flex flex-col item-center">
-            <h1 className="text-xl pt-12 text-gray-700 text-center">{register? "Login": "Register"}</h1>
-            {register? signInForm : registerForm}
-            <button className="p-2 text-xs text-left mt-6 text-blue-900 sm:text-center"  onClick={()=>{setRegister(prev => !prev)}}>{register? "don't have an account yet": "want to regsiter?"}</button>
-            {errorMessage ? <p className="text-sm text-red-400 sm:text-center text-left">{errorMessage}</p> : null}
-            {Loading ?  Loader : null}
-        </div>
+    return  <div>
+                <Routes>      
+            <Route exact path="/" element={returnedCreatedUser.status === 200 ? <Navigate to="user"/> : <div className="h-screen  flex ">
+            <div className="w-3/4 flex flex-col item-center">
+                <h1 className="text-xl pt-12 text-gray-700 text-center">{register? "Login": "Register"}</h1>
+                {register? signInForm : registerForm}
+                <button className="p-2 text-xs text-left mt-6 text-blue-900 sm:text-center"  onClick={()=>{setRegister(prev => !prev)}}>{register? "don't have an account yet": "want to regsiter?"}</button>
+                {errorMessage ? <p className="text-sm text-red-400 sm:text-center text-left">{errorMessage}</p> : null}
+                {Loading ?  Loader : null}
+            </div>
 
-        <div className="w-3/4 h-screen bg-blue-100 overflow-x-hidden sm:w-full max-w-screen bg-cover" style={{
-            "backgroundImage" : `url(${backgroundImageDetails.backGroundPhoto})`
-        }}>
-           
-            <div className="flex flex-col p-1 pb-0 font-sans italic inline text-shadow z-10 sm:absolute sm:top-6 ">
-                <div className="text-4xl sm:text-6xl text-gray-900 text-shadow -ml-1 inline">Discover</div>
-                <div className="text-2xl sm:text-4xl text-gray-700 inline">Découvrir</div>
-                <div className="text-lg text-gray-600 inline">Descubrir</div>
+            <div className="w-3/4 h-screen bg-blue-100 overflow-x-hidden sm:w-full max-w-screen bg-cover" style={{
+                "backgroundImage" : `url(${backgroundImageDetails.backGroundPhoto})`
+            }}>
+            
+                <div className="flex flex-col p-1 pb-0 font-sans italic inline text-shadow z-10 sm:absolute sm:top-6 ">
+                    <div className="text-4xl sm:text-6xl text-gray-900 text-shadow -ml-1 inline">Discover</div>
+                    <div className="text-2xl sm:text-4xl text-gray-700 inline">Découvrir</div>
+                    <div className="text-lg text-gray-600 inline">Descubrir</div>
+                    
+                </div>
                 
+                <p className="text-xs font-sans text-right mr-2 text-white absolute bottom-10 ml-2">photo by {backgroundImageDetails.backGroundPhotoAuthor}</p>
             </div>
             
-            <p className="text-xs font-sans text-right mr-2 text-white absolute bottom-10 ml-2">photo by {backgroundImageDetails.backGroundPhotoAuthor}</p>
-        </div>
         
-       
+        </div>
+            }
+        />
+   
+      <Route path="*" element={<NotFound />} />
+      <Route path="/user" element={<MainPage user={returnedCreatedUser} />} />
+    </Routes>
+
+
+ 
+
+   
+
+  
     </div>
 }
 
