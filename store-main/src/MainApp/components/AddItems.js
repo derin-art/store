@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function AddItems({setCurrentItem, currentItem}){
+export default function AddItems({setCurrentItem, currentItem, setPreviewMode}){
     const [itemInput, setItemInput] = React.useState({})
   
 
@@ -51,7 +51,7 @@ export default function AddItems({setCurrentItem, currentItem}){
 
     
 
-    return <div className="flex items-center justify-center">
+    return <div className="flex items-center justify-center flex-col">
        
                 <div className="w-48 border border-gray-300 p-2 rounded">
                     <p className="text-sm font-bold mb-2 text-gray-600">Item Card</p>
@@ -65,5 +65,7 @@ export default function AddItems({setCurrentItem, currentItem}){
                     </form>
 
                 </div>
+
+                <button className="px-2 w-24 bg-green-400 text-sm font-serif mt-2 rounded hover:bg-green-500 text-white" onClick={()=>{setPreviewMode(prev => !prev)}}>preview mode</button>
             </div>
 }

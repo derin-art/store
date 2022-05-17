@@ -267,10 +267,10 @@ const signInForm =   <form className="flex flex-col pl-2 sm:items-center sm:just
                 "backgroundImage" : `url(${backgroundImageDetails.backGroundPhoto})`
             }}>
             
-                <div className="flex flex-col p-1 pb-0 font-sans italic inline text-shadow z-10 sm:absolute sm:top-6 ">
+                <div className="flex flex-col p-1 pb-0 font-sans italic inline text-shadow z-10 sm:absolute sm:top-6 " style={{textShadow: "2px 2px 5px white"}}>
                     <div className="text-4xl sm:text-6xl text-gray-900 text-shadow -ml-1 inline">Discover</div>
                     <div className="text-2xl sm:text-4xl text-gray-700 inline">Découvrir</div>
-                    <div className="text-lg text-gray-600 inline">Descubrir</div>
+                    <div className="text-lg text-gray-600 inline" >Descubrir</div>
                     
                 </div>
                 
