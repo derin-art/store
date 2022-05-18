@@ -16,7 +16,6 @@ const getAllitems = async(req, res, next)=>{
 
 
 const deleteItem = async(req, res, next)=>{
-    
         const {id: itemID} = req.params
         const item = await Item.findOneAndDelete({_id: itemID})
         if(!item){
@@ -55,6 +54,14 @@ const createItems = async(req, res, next)=>{
    
 }
 
+const deleteAll = async (req, res, next)=>{
+    console.log("Could be")
+    const items = await Item.deleteMany({price: 120})
+    console.log(items)
+    const {acknowledged, deletedCount } = items
+    res.status(200).json({msg: "success items deleted"})
+}
+
 const editItem = async(req, res, next)=>{
     
         const {id} = req.params
@@ -73,7 +80,7 @@ const editItem = async(req, res, next)=>{
 
 }
 
-module.exports = {getAllitems, createItems, getSingleItem, deleteItem, editItem}
+module.exports = {getAllitems, createItems, getSingleItem, deleteItem, editItem, deleteAll}
 
 
 

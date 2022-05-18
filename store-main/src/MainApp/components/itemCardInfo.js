@@ -8,7 +8,7 @@ export default function CardInfo({currentItem}){
     const onStarChange = (nextValue, prevValue, name)=>{
         setStarRating(nextValue)
     }
-    return (<div className="bg-gray-100 font-mono mt-2 pl-2">
+    return (<div className="bg-gray-100 font-mono pl-2">
                     {currentItem.itemName && <div className="text-sm  mb-2 uppercase">{currentItem.itemName}</div>}
                    {currentItem.itemPrice && <div className="text-xs mb-2 ">{price}</div>}
                     <StarRatingComponent name="rating" editing={true} starColor="" onStarClick={()=>{onStarChange()}} emptyStarColor="#b2beb5" value={startRating}></StarRatingComponent>
