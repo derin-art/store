@@ -1,9 +1,10 @@
 const express = require("express")
 const multer = require("multer")
+const cors = require("cors")
 require("express-async-errors")
 const storage = multer.diskStorage({
     destination:function(req, file, cb){
-       cb(null, "./uploads/")
+       cb(null, "./controllers/uploads/")
     },
     filename: function(req, file, cb){
         cb(null, file.originalname)
@@ -32,7 +33,7 @@ const router = express.Router()
 router.route("/users").get(getAllUsers)
 router.route("/users/login").post(verifyUser)
 router.route("/users").post(createUser)
-router.route("/storeV1").get(getAllitems).post(uploads.single("productImage"),createItems)
+router.route("/storeV1").get(getAllitems).post(uploads.single("img"),createItems)
 router.route("/storeV1/:id").get(getSingleItem).delete(deleteItem).patch(uploads.single("productImage"),editItem)
 router.route("/deleteall").delete(deleteAll)
 

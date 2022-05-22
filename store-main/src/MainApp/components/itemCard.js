@@ -3,7 +3,7 @@ import CardInfo from "./itemCardInfo";
 
 export default function ItemCard({currentItem}){
 
-    return ( <div className="border w-48 bg-gray-100 rounded-sm">
+    return ( <div className="border w-48 bg-gray-100 rounded-sm border-gray-300">
                 <div className="w-full h-64 mb-2">
                     <img  className="w-full" src={currentItem.result}></img>
                 </div>

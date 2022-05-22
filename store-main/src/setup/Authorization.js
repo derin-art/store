@@ -254,7 +254,7 @@ const signInForm =   <form className="flex flex-col pl-2 sm:items-center sm:just
    
     return  <div>
                 <Routes>      
-            <Route exact path="/" element={returnedCreatedUser.status === 200 ? <Navigate to="user"/> : <div className="h-screen  flex ">
+            <Route exact path="/" element={returnedCreatedUser.status === 200 ?  <Navigate to="user"/> : <div className="h-screen  flex ">
             <div className="w-3/4 flex flex-col item-center">
                 <h1 className="text-xl pt-12 text-gray-700 text-center">{register? "Login": "Register"}</h1>
                 {register? signInForm : registerForm}

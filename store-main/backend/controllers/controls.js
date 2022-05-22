@@ -1,6 +1,9 @@
 const Item = require("../modules/itemSchema.js")
 require("express-async-errors")
 const CustomError = require('../CutomError/CustomError')
+const { fstat } = require("fs")
+const fs = require("fs")
+const path = require("path")
 
 
 const getAllitems = async(req, res, next)=>{
@@ -11,6 +14,7 @@ const getAllitems = async(req, res, next)=>{
     }
 
     res.status(200).json({msg: "successful", data: items})
+   
 
 }
 
@@ -42,16 +46,51 @@ const getSingleItem = async(req, res, next)=>{
 }
 
 const createItems = async(req, res, next)=>{
-
+/*     res.set('Access-Control-Allow-Origin', '*') */
+  /*   img: req.body.img, */
+    console.log(req.body)
+    console.log("get it")
+    if(!req.file){
+        throw new CustomError("No file present", 400)
+    }
+    console.log(__dirname)
+    const uploadsDir = "C:/Users/owoad/Downloads/store-main/store-main/backend"
+    console.log(req.file)
+        const urlData = fs.readFileSync(path.join( __dirname + "/uploads/" + req.file.originalname), {encoding: 'base64'}).toString()
+        console.log("heyyy")
         const item = await Item.create({
             name: req.body.name,
             price: req.body.price,
-            img: req.file.path
+        /*     img: {
+                data: urlData,
+                contentType : "image/png"
+            }, */
+            img: urlData,
+            description: req.body.description
+            
         })
+        if(!item){
+            console.log("failed")
+            throw new CustomError("Creation error", 500)
+            return
+        }
         res
+        .header("Access-Control-Allow-Origin" , "*")
         .status(200)
         .json({msg: "successful", data: item})
    
+}
+
+const createItems2 = async(req, res, next)=>{
+    console.log("is working")
+    const {name, price, img, description} = req.body
+    const item = await Item.create({
+        name, price, img, description
+    })
+    res
+    .header("Access-Control-Allow-Origin" , "*")
+    .status(200)
+    .json({msg: "successful", data: item})
 }
 
 const deleteAll = async (req, res, next)=>{

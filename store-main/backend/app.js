@@ -1,6 +1,8 @@
 const express = require("express")
 const connect = require("./database/connect.js")
 const cors = require("cors")
+const bodyParser = require("body-parser")
+
 const app = express()
 const router = require("./routers/router.js")
 const {basicError, notFoundError} = require("./errors/BasicErrors.js")
@@ -13,9 +15,16 @@ require("dotenv").config()
 
 app.use(express.json())
 
-app.use(cors({
-    origin: "*"
-}))
+
+
+
+
+app.use(cors(
+    {origin: "*"}
+))
+
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
 
 app.use("/", router)
 

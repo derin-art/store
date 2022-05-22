@@ -4,8 +4,12 @@ const itemSchema = new mongoose.Schema({
     name: {type:String, required:[true, "must provide name"], maxlength:[30, "name cannot exceed 30 characters"]},
     price: {type:Number, required: [true, "must provide price"]},
     comments: [{body:String, date:Date}],
-    img:{type: String, required: true},
-    rating: {type: Number}
+   /*  img:{data:Buffer,contentType: String}, */
+ /*   img: {type: String, data: Buffer}, */
+    img : {type: String},
+    rating: {
+        type: Number},
+    description : {type: String}
 })
 
 
