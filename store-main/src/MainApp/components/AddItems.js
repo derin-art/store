@@ -5,16 +5,19 @@ export default function AddItems({setCurrentItem, currentItem, setPreviewMode, u
     const [itemInput, setItemInput] = React.useState({})
     const [errorMessage, setErrorMessage] = React.useState()
     const [data, setData] = React.useState()
+    const [goodPost, setGoodPost] = React.useState()
 
 
     const handleNameInput = (e)=>{
         setItemInput(prev => ({...prev, itemName : e.target.value }))
+        setGoodPost(false)
       
 
     }
 
     const handlePriceInput = (e)=>{
         setItemInput(prev => ({...prev, itemPrice : e.target.value}))
+        setGoodPost(false)
         
     }
 
@@ -35,12 +38,14 @@ export default function AddItems({setCurrentItem, currentItem, setPreviewMode, u
         fileReader.readAsDataURL(imgFile)
 
         setItemInput(prev => ({...prev, img: imgFile}))
+        setGoodPost(false)
       
         
 
     }
 
     const pushItem = async ()=>{
+        setGoodPost(false)
         if(!itemInput.itemName){
             setErrorMessage("Please complete the form")
             return
@@ -75,16 +80,21 @@ export default function AddItems({setCurrentItem, currentItem, setPreviewMode, u
             console.log(JSON.parse(refinedErr.response))
             return
          })
-         console.log(JSON.stringify(item))
+         console.log(JSON.parse(JSON.stringify(item)))
+         setData(JSON.parse(JSON.stringify(item)))
+         setErrorMessage("")
+         setGoodPost(true)
     }
 
 
     const handleDescriptionInput = (e)=>{
         setItemInput(prev => ({...prev, itemDescription : e.target.value }))
+        setGoodPost(false)
  
 
     }
 
+    /* To test the get function. Keep in Mind the State it sets to is already in use, Change it */
     const getSeverItem = async ()=>{
         const data = await axios.get("http://localhost:1000/storeV1")
         .catch(err =>{
@@ -100,16 +110,16 @@ export default function AddItems({setCurrentItem, currentItem, setPreviewMode, u
 
     }
 
-    const neww = []
+    const imgArray = []
 
   
 
-    const letsgo = async ()=>{
+    const pushServerImages = async ()=>{
         if(data){
             const newData = data.data.data
             console.log(newData, "Hnsns")
             newData.map(item => {
-                neww.push(<img src={`data:image/jpeg;base64,${item.img}`}></img>)
+                imgArray.push(<img src={`data:image/jpeg;base64,${item.img}`}></img>)
             })
         }
         else{
@@ -118,18 +128,18 @@ export default function AddItems({setCurrentItem, currentItem, setPreviewMode, u
     }
     
 
-    letsgo()
-    console.log(neww)
+   
 
 
 
 
-    console.log(itemInput)
+
     setCurrentItem(itemInput)
 
     const uploadIcon = <svg xmlns="http://www.w3.org/2000/svg" className="group-hover:fill-green-400 fill-white" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M12 12.586l4.243 4.242-1.415 1.415L13 16.415V22h-2v-5.587l-1.828 1.83-1.415-1.415L12 12.586zM12 2a7.001 7.001 0 0 1 6.954 6.194 5.5 5.5 0 0 1-.953 10.784v-2.014a3.5 3.5 0 1 0-1.112-6.91 5 5 0 1 0-9.777 0 3.5 3.5 0 0 0-1.292 6.88l.18.03v2.014a5.5 5.5 0 0 1-.954-10.784A7 7 0 0 1 12 2z"/></svg>
     const userIcon = <svg xmlns="http://www.w3.org/2000/svg" className="fill-green-400 mr-1" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M12 17c3.662 0 6.865 1.575 8.607 3.925l-1.842.871C17.347 20.116 14.847 19 12 19c-2.847 0-5.347 1.116-6.765 2.796l-1.841-.872C5.136 18.574 8.338 17 12 17zm0-15a5 5 0 0 1 5 5v3a5 5 0 0 1-10 0V7a5 5 0 0 1 5-5z" /></svg>
     const imageTick = <svg xmlns="http://www.w3.org/2000/svg" className="fill-green-400" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M11.602 13.76l1.412 1.412 8.466-8.466 1.414 1.414-9.88 9.88-6.364-6.364 1.414-1.414 2.125 2.125 1.413 1.412zm.002-2.828l4.952-4.953 1.41 1.41-4.952 4.953-1.41-1.41zm-2.827 5.655L7.364 18 1 11.636l1.414-1.414 1.413 1.413-.001.001 4.951 4.951z"/></svg>
+    const saveIcon = <svg xmlns="http://www.w3.org/2000/svg" className="fill-green-400"  viewBox="0 0 24 24" width="16" height="16"><path fill="none" d="M0 0h24v24H0z"/><path d="M18 21v-8H6v8H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h13l4 4v13a1 1 0 0 1-1 1h-2zm-2 0H8v-6h8v6z"/></svg>
 
   const imageLoadedText = <p> {imageTick}Image Loaded</p>
 
@@ -156,9 +166,10 @@ export default function AddItems({setCurrentItem, currentItem, setPreviewMode, u
                     <button className="px-3 flex justify-center items-center group py-2 w-24 bg-green-400 text-xs rounded-sm font-bold mt-2 hover:bg-black hover:text-green-400 uppercase text-white" onClick={()=>{pushItem()}} > 
                        {uploadIcon} <p className="ml-2"> Push</p>
                      </button>
-                     <button onClick={()=>getSeverItem()}>Get</button>
-                     {neww}
 
                 </div>
+              {errorMessage &&   <p className="text-red-500 text-xs font-bold">{errorMessage}</p>}
+              {goodPost && <p className="flex uppercase text-xs font-bold justify-center items-center mt-2 text-gray-700">Saved succesful<p className="ml-1">{saveIcon}</p></p>}
+                
             </div>
 }

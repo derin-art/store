@@ -16,7 +16,7 @@ export default function MainPage({user}){
 
         <div className="items-start justify-center sm:flex mt-10">
         <div className="mb-2"><AddItems user={user} setCurrentItem= {setCurrentItem} currentItem={currentItem} setPreviewMode={setPreviewMode} /></div>
-      {previewMode &&  <div className="flex justify-center items-center ml-2"> <ItemCard currentItem={currentItem}></ItemCard></div>}
+      {previewMode &&  <div className="flex justify-center items-center ml-2 pb-6"> <ItemCard currentItem={currentItem}></ItemCard></div>}
         </div>
 
 
