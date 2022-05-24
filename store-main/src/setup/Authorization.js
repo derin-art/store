@@ -247,14 +247,14 @@ const signInForm =   <form className="flex flex-col pl-2 sm:items-center sm:just
         <button type="button" onClick={()=>{validateSignInForm()}} className="w-24 mt-4 p-2 text-blue-400 border border-blue-900 focus:bg-blue-700 focus:text-white hover:bg-gray-900 ">login</button>
     </form>
      
-     console.log(backgroundImageDetails)
+   /*   console.log(backgroundImageDetails)
      console.log(registerFormData)
      console.log(useLocation())
      console.log(returnedCreatedUser, "returned data")
-   
+    */
     return  <div>
                 <Routes>      
-            <Route exact path="/" element={returnedCreatedUser.status === 200 ?  <Navigate to="user"/> : <div className="h-screen  flex ">
+            <Route exact path="/" element={returnedCreatedUser.status === 200 ?  <Navigate to="/user"/> : <div className="h-screen  flex ">
             <div className="w-3/4 flex flex-col item-center">
                 <h1 className="text-xl pt-12 text-gray-700 text-center">{register? "Login": "Register"}</h1>
                 {register? signInForm : registerForm}
@@ -267,10 +267,10 @@ const signInForm =   <form className="flex flex-col pl-2 sm:items-center sm:just
                 "backgroundImage" : `url(${backgroundImageDetails.backGroundPhoto})`
             }}>
             
-                <div className="flex flex-col p-1 pb-0 font-sans italic inline text-shadow z-10 sm:absolute sm:top-6 " style={{textShadow: "2px 2px 5px white"}}>
-                    <div className="text-4xl sm:text-6xl text-gray-900 text-shadow -ml-1 inline">Discover</div>
-                    <div className="text-2xl sm:text-4xl text-gray-700 inline">Découvrir</div>
-                    <div className="text-lg text-gray-600 inline" >Descubrir</div>
+                <div className="flex flex-col p-1 pb-0 font-sans  inline text-shadow z-10 sm:absolute sm:top-6 " style={{textShadow: "2px 2px 5px gray"}}>
+                    <div className="text-4xl sm:text-6xl text-white text-shadow -ml-1 inline">Discover</div>
+                    <div className="text-2xl sm:text-4xl text-white inline">Découvrir</div>
+                    <div className="text-lg text-white inline" >Descubrir</div>
                     
                 </div>
                 
@@ -283,7 +283,7 @@ const signInForm =   <form className="flex flex-col pl-2 sm:items-center sm:just
         />
    
       <Route path="*" element={<NotFound />} />
-      <Route path="/user" element={<MainPage user={returnedCreatedUser} />} />
+      <Route path="/user/*" element={<MainPage user={returnedCreatedUser} />} />
     </Routes>
 
 

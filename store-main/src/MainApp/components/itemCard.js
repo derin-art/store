@@ -28,7 +28,7 @@ export default function ItemCard({currentItem}){
                 </div>
                 <CardInfo currentItem={currentItem} /></>: 
                 <div className="p-2 self-center">
-                   <p className="ml-5"> No data available</p>
+                   <p className="ml-5 text-red-400"> No data available</p>
                     </div>}
              
 
