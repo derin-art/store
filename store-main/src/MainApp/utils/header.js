@@ -12,7 +12,7 @@ export default function Header(){
     
 
    
-   return (<div className="w-full h-12 py-2 flex pt-6 pb-6 justify-center mt-8">
+   return (<div className="w-full h-12 py-2 bg-white flex pt-6 pb-6 justify-center mt-2 p-8">
        
           <Link to="/">
             <button onClick={()=>{
