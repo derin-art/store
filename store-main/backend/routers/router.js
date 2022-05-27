@@ -34,7 +34,7 @@ router.route("/users").get(getAllUsers)
 router.route("/users/login").post(verifyUser)
 router.route("/users").post(createUser)
 router.route("/storeV1").get(getAllitems).post(uploads.single("img"),createItems)
-router.route("/storeV1/:id").get(getSingleItem).delete(deleteItem).patch(uploads.single("productImage"),editItem)
+router.route("/storeV1/:id").get(getSingleItem).delete(deleteItem).patch(uploads.single("img"), cors(),editItem)
 router.route("/deleteall").delete(deleteAll)
 
 

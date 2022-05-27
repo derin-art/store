@@ -17,11 +17,13 @@ app.use(express.json())
 
 
 
-
+app.options('*', cors())
 
 app.use(cors(
     {origin: "*"}
 ))
+
+
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())

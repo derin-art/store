@@ -102,18 +102,37 @@ const deleteAll = async (req, res, next)=>{
 }
 
 const editItem = async(req, res, next)=>{
-    
+       
         const {id} = req.params
+        console.log(id)
         const {name, price} = req.body
-        const productImage = req.file.path
-        const item = await Item.findOneAndUpdate({_id: id}, {name, price, img: productImage}, {new: true, runValidators: true})
-        if(!item){
+    
+        if(req.file){
+            console.log("hey")
+            const urlData = fs.readFileSync(path.join( __dirname + "/uploads/" + req.file.originalname), {encoding: 'base64'}).toString()
+            const item = await Item.findOneAndUpdate({_id: id}, {name, price, img:urlData}, {new: true, runValidators: true})
+            if(!item){
+                throw new CustomError(`The item of id ${id} doesn't exist`, 404)
+            }
+            res
+            .status(200)
+            .json({msg: "success", data: item})
+            return
 
-            throw new CustomError(`The item of id ${id} doesn't exist`, 404)
         }
-        res
-        .status(200)
-        .json({msg: "success", data: item})
+      
+            const item = await Item.findOneAndUpdate({_id: id}, {name, price}, {new: true, runValidators: true})
+            if(!item){
+                throw new CustomError(`The item of id ${id} doesn't exist`, 404)
+            }
+            res
+            .status(200)
+            .json({msg: "success", data: item})
+            return
+        
+      
+
+        
    
    
 

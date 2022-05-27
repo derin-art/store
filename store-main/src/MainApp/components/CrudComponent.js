@@ -27,8 +27,8 @@ export default function CrudComponent(){
 
     React.useEffect(()=>{
         if(resStatus === 200){
-            setItemArray(itemData.map(item => <CrudItem key={item._id} name={item.name}
-                price ={item.price} description = {item.description} img={item.img}
+            setItemArray(itemData.map(item => <CrudItem key={item._id} id={item._id} name={item.name}
+                price ={item.price} description = {item.description} img={item.img} setItemData={setItemData}
                 />))
       
         } 
@@ -45,7 +45,9 @@ export default function CrudComponent(){
 
 
     return <div>
-        <h1 className="pt-16">Crud Component</h1>
+        <h1 className="pt-16 w-full flex justify-center items-center mb-4 text-green-400 font-bold">CRUD <p className="ml-4 text-xs mt-1 justify-center items-center flex text-gray-700 uppercase">Item number:<p className="text-green-400 ml-1 font-bold">{ItemArray ? ItemArray.length: null}</p></p></h1>
+      <div className="flex flex-col justify-center items-center">
         {ItemArray}
+      </div>
     </div>
 }

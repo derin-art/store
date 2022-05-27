@@ -66,7 +66,10 @@ export default function AddItems({setCurrentItem, currentItem, setPreviewMode, u
         formdata.append("name", itemInput.itemName)
         formdata.append("price", itemInput.itemPrice)
         formdata.append("description", itemInput.itemDescription)
+        if(itemInput.img){
         formdata.append("img", itemInput.img)
+       }
+        
 
         const config = {
             headers: { 'content-type': 'multipart/form-data'}
@@ -157,9 +160,9 @@ export default function AddItems({setCurrentItem, currentItem, setPreviewMode, u
                         <label   htmlFor="img"  className={`bg-gray-700 rounded mb-4 py-2 px-3 w-full text-white hover:bg-gray-900`}> {itemInput.result ? imageLoadedText : "Click to input image"}
                          </label>
                          <input type="file" id="img" onChange={(e)=>{imageInput(e)}} className={`ml-2 mb-4 text-sm hidden `} accept="image/*" name="img" placeholder="Display Image"></input>
-                         <input type="text" onChange={(e)=>{handleNameInput(e)}} className="mb-4 focus:outline outline-gray-400 outline-2 bg-gray-100 outline-gray-300 rounded placeholder:text-gray-500 p-2 w-full" placeholder="Name"></input>
-                        <input type="number" onChange={(e)=>{handlePriceInput(e)}} className="bg-gray-100 mb-4 focus:outline outline-2 outline-gray-400 p-2 placeholder:text-gray-500 rounded w-full" placeholder="Price"></input>
-                        <textarea onChange={(e)=>{handleDescriptionInput(e)}} className="bg-gray-100 p-2 outline-gray-300 focus:outline outline-2 outline-gray-400 placeholder:text-gray-500 rounded w-full" placeholder="Description"></textarea>
+                         <input type="text" value={itemInput.itemName} onChange={(e)=>{handleNameInput(e)}} className="mb-4 focus:outline outline-gray-400 outline-2 bg-gray-100 outline-gray-300 rounded placeholder:text-gray-500 p-2 w-full" placeholder="Name"></input>
+                        <input type="number" value={itemInput.itemPrice} onChange={(e)=>{handlePriceInput(e)}} className="bg-gray-100 mb-4 focus:outline outline-2 outline-gray-400 p-2 placeholder:text-gray-500 rounded w-full" placeholder="Price"></input>
+                        <textarea value={itemInput.itemDescription} onChange={(e)=>{handleDescriptionInput(e)}} className="bg-gray-100 p-2 outline-gray-300 focus:outline outline-2 outline-gray-400 placeholder:text-gray-500 rounded w-full" placeholder="Description"></textarea>
                     </form>
 
                 </div>
