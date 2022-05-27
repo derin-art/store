@@ -81,7 +81,7 @@ export default function CrudItem({name, price, img, description, id, setItemData
         })
         setItemData(prev => {
          return prev.filter((obj)=> {
-                return obj._id != id
+                return obj._id !== id
             })
         })
         setDeleteSent(false)
